@@ -4,9 +4,17 @@ import { colors } from '../constants/constants'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-const NoteCard = ({ title, value, date, onClick }) => {
+const NoteCard = ({ title, value, date, onClick, onLongPress, hover }) => {
   return (
-    <TouchableOpacity style={styles.noteCardContainer} onPress={onClick}>
+    <TouchableOpacity
+      style={
+        hover
+          ? [styles.noteCardContainer, styles.noteCardContainerHover]
+          : styles.noteCardContainer
+      }
+      onPress={onClick}
+      onLongPress={onLongPress}
+    >
       <Text style={styles.noteCardTitle}>{title}</Text>
       <Text style={styles.noteCardContent}>{value}</Text>
       <Text style={styles.noteCardDate}>
@@ -21,12 +29,15 @@ export default NoteCard
 const styles = StyleSheet.create({
   noteCardContainer: {
     width: '48%',
-    height: 200,
+    height: 208,
     backgroundColor: colors.backgroundContainer,
     padding: 14,
     borderRadius: 20,
     display: 'flex',
     justifyContent: 'space-between'
+  },
+  noteCardContainerHover: {
+    backgroundColor: colors.backgroundContainerHover
   },
   noteCardTitle: {
     color: colors.contentWhite

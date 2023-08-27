@@ -9,6 +9,19 @@ export const deleteAllNotes = async () => {
   }
 }
 
+export const deleteNotesByIds = async (ids, fetchNotes) => {
+  try {
+    // Supprimer chaque note individuellement en fonction de son ID
+    for (const id of ids) {
+      await AsyncStorage.removeItem(id.toString())
+    }
+    fetchNotes()
+    console.log('Notes deleted successfully!')
+  } catch (error) {
+    console.error('Error deleting notes:', error)
+  }
+}
+
 export const getNoteById = async noteId => {
   try {
     const note = await AsyncStorage.getItem(noteId)

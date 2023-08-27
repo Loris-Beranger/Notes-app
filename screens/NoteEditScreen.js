@@ -123,6 +123,7 @@ const NoteEditScreen = ({ navigation }) => {
         style={styles.textInputContent}
         onChangeText={setInputContentValue}
         value={inputContentValue}
+        multiline
       />
     </SafeAreaView>
   )
@@ -160,7 +161,8 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlignVertical: 'top',
     marginTop: 30,
-    color: colors.contentWhiteMinor
+    color: colors.contentWhiteMinor,
+    flexWrap: 'wrap'
   },
   textInputTitle: {
     height: 30,

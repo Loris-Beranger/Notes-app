@@ -16,6 +16,7 @@ import { deleteAllNotes, deleteNotesByIds } from '../storageFunctions/storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
+import EmptyState from '../components/EmptyState'
 
 const HomeScreen = ({ navigation }) => {
   const [notes, setNotes] = useState([])
@@ -80,12 +81,12 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         )}
       </View>
-      <ScrollView
-        contentContainerStyle={styles.notesListContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {notes &&
-          notes.map(note => (
+      {notes && notes.length > 0 ? (
+        <ScrollView
+          contentContainerStyle={styles.notesListContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {notes.map(note => (
             <NoteCard
               key={note.id}
               title={note.title}
@@ -112,7 +113,10 @@ const HomeScreen = ({ navigation }) => {
               }}
             />
           ))}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        <EmptyState />
+      )}
       <ButtonNewNote onClick={() => navigation.navigate('NoteEdit')} />
     </SafeAreaView>
   )

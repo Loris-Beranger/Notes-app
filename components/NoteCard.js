@@ -1,19 +1,42 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { colors } from '../constants/constants'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 const NoteCard = ({ title, value, date, onClick, onLongPress, hover }) => {
+  const [isPressed, setIsPressed] = useState(false)
+
+  const handlePressIn = () => {
+    setIsPressed(true)
+  }
+  const handlePressOut = () => {
+    setIsPressed(false)
+  }
+
+  const buttonContainerStyle = hover
+    ? [styles.noteCardContainer, styles.noteCardContainerHover]
+    : styles.noteCardContainer
+
+  const getButtonStyle = () => {
+    if (isPressed) {
+      return [styles.noteCardContainer, styles.noteCardContainerClicked]
+    }
+    if (hover) {
+      return [styles.noteCardContainer, styles.noteCardContainerHover]
+    } else {
+      return styles.noteCardContainer
+    }
+  }
+
   return (
     <TouchableOpacity
-      style={
-        hover
-          ? [styles.noteCardContainer, styles.noteCardContainerHover]
-          : styles.noteCardContainer
-      }
+      style={getButtonStyle()}
       onPress={onClick}
       onLongPress={onLongPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      activeOpacity={0.8}
     >
       <Text style={styles.noteCardTitle}>{title}</Text>
       <Text style={styles.noteCardContent}>{value}</Text>
@@ -38,6 +61,9 @@ const styles = StyleSheet.create({
   },
   noteCardContainerHover: {
     backgroundColor: colors.backgroundContainerHover
+  },
+  noteCardContainerClicked: {
+    transform: [{ scale: 0.9 }]
   },
   noteCardTitle: {
     color: colors.contentWhite

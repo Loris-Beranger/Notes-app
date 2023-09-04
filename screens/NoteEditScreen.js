@@ -8,7 +8,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors } from '../constants/constants'
 import { Entypo } from '@expo/vector-icons'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -21,6 +21,7 @@ const NoteEditScreen = ({ navigation }) => {
   const [inputTitleValue, setInputTitleValue] = useState('')
   const [date, setDate] = useState(new Date().toISOString())
   const [noteId, setNoteId] = useState()
+  const inputRef = useRef(null)
   const route = useRoute()
 
   useEffect(() => {
@@ -36,6 +37,8 @@ const NoteEditScreen = ({ navigation }) => {
       }
 
       fetchNote()
+    } else {
+      inputRef.current.focus()
     }
   }, [])
   const saveNote = async () => {
@@ -108,6 +111,7 @@ const NoteEditScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <TextInput
+        ref={inputRef}
         style={styles.textInputTitle}
         placeholder={'Titre'}
         placeholderTextColor={colors.contentGrey}

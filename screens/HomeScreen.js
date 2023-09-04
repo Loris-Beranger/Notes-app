@@ -17,12 +17,14 @@ import { useFocusEffect } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
 import EmptyState from '../components/EmptyState'
+import CustomModal from '../components/Modal'
 
 const HomeScreen = ({ navigation }) => {
   const [notes, setNotes] = useState([])
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [selectNoteList, setSelectNoteList] = useState([])
+  const [modalDeleteVisisble, setModalDeleteVisible] = useState(false)
 
   useEffect(() => {
     fetchNotes()
@@ -53,6 +55,7 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const handleDelete = () => {
+    console.log('delete')
     if (selectNoteList) {
       deleteNotesByIds(selectNoteList, fetchNotes)
       setEditMode(false)
@@ -61,72 +64,86 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.homeContainer}>
-      <View style={styles.headerContainer}>
-        {editMode ? (
-          <TouchableOpacity
-            onPress={() => {
-              setEditMode(false)
-              setSelectNoteList([])
-            }}
+    <View style={styles.pageWrap}>
+      <SafeAreaView style={styles.homeContainer}>
+        <View style={styles.headerContainer}>
+          {editMode ? (
+            <TouchableOpacity
+              onPress={() => {
+                setEditMode(false)
+                setSelectNoteList([])
+              }}
+            >
+              <AntDesign name='close' size={20} color={colors.contentWhite} />
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.homeTitle}>Notes</Text>
+          )}
+          {editMode && (
+            <TouchableOpacity onPress={() => setModalDeleteVisible(true)}>
+              <FontAwesome
+                name='trash-o'
+                size={18}
+                color={colors.contentWhite}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        {notes && notes.length > 0 ? (
+          <ScrollView
+            contentContainerStyle={styles.notesListContainer}
+            showsVerticalScrollIndicator={false}
           >
-            <AntDesign name='close' size={20} color={colors.contentWhite} />
-          </TouchableOpacity>
-        ) : (
-          <Text style={styles.homeTitle}>Notes</Text>
-        )}
-        {editMode && (
-          <TouchableOpacity onPress={handleDelete}>
-            <FontAwesome name='trash-o' size={18} color={colors.contentWhite} />
-          </TouchableOpacity>
-        )}
-      </View>
-      {notes && notes.length > 0 ? (
-        <ScrollView
-          contentContainerStyle={styles.notesListContainer}
-          showsVerticalScrollIndicator={false}
-        >
-          {notes.map(note => (
-            <NoteCard
-              key={note.id}
-              title={note.title}
-              value={note.value}
-              date={note.date}
-              hover={selectNoteList.find(n => n === note.id)}
-              onClick={() => {
-                if (editMode) {
-                  if (selectNoteList.find(n => n === note.id)) {
-                    setSelectNoteList([
-                      ...selectNoteList.filter(n => n !== note.id)
-                    ])
+            {notes.map(note => (
+              <NoteCard
+                key={note.id}
+                title={note.title}
+                value={note.value}
+                date={note.date}
+                hover={selectNoteList.find(n => n === note.id)}
+                onClick={() => {
+                  if (editMode) {
+                    if (selectNoteList.find(n => n === note.id)) {
+                      setSelectNoteList([
+                        ...selectNoteList.filter(n => n !== note.id)
+                      ])
+                    } else {
+                      setSelectNoteList([...selectNoteList, note.id])
+                    }
                   } else {
-                    setSelectNoteList([...selectNoteList, note.id])
+                    navigation.navigate('NoteEdit', { noteId: note.id })
                   }
-                } else {
-                  navigation.navigate('NoteEdit', { noteId: note.id })
-                }
-              }}
-              onLongPress={() => {
-                setEditMode(true)
-                setSelectNoteList([note.id])
-                Vibration.vibrate(50)
-              }}
-            />
-          ))}
-        </ScrollView>
-      ) : (
-        <EmptyState />
-      )}
-      <ButtonNewNote onClick={() => navigation.navigate('NoteEdit')} />
-    </SafeAreaView>
+                }}
+                onLongPress={() => {
+                  setEditMode(true)
+                  setSelectNoteList([note.id])
+                  Vibration.vibrate(50)
+                }}
+              />
+            ))}
+          </ScrollView>
+        ) : (
+          <EmptyState />
+        )}
+        <ButtonNewNote onClick={() => navigation.navigate('NoteEdit')} />
+      </SafeAreaView>
+      <CustomModal
+        visible={modalDeleteVisisble}
+        closeModal={() => setModalDeleteVisible(false)}
+        action={handleDelete}
+      />
+    </View>
   )
 }
 
 export default HomeScreen
 
 const styles = StyleSheet.create({
+  pageWrap: {
+    flex: 1,
+    backgroundColor: colors.backgroundPlatform
+  },
   homeContainer: {
-    backgroundColor: colors.backgroundPlatform,
     flex: 1,
     padding: 20,
     paddingBottom: 0

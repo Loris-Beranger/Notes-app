@@ -5,7 +5,11 @@ import { colors } from './constants/constants'
 import AppNavigator from './navigation/appNavigation'
 
 export default function App () {
-  return <AppNavigator />
+  return (
+    <View style={styles.container}>
+      <AppNavigator />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

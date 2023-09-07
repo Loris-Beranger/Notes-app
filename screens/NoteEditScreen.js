@@ -42,21 +42,23 @@ const NoteEditScreen = ({ navigation }) => {
     }
   }, [])
   const saveNote = async () => {
-    try {
-      const id = Date.now().toString() // Generate a unique ID based on timestamp
-      const newNote = {
-        id,
-        title: inputTitleValue
-          ? inputTitleValue
-          : extractAndTruncateFirstWord(inputContentValue),
-        date,
-        value: inputContentValue
-      }
+    if (inputContentValue.trim(' ') || inputTitleValue.trim(' ')) {
+      try {
+        const id = Date.now().toString() // Generate a unique ID based on timestamp
+        const newNote = {
+          id,
+          title: inputTitleValue
+            ? inputTitleValue
+            : extractAndTruncateFirstWord(inputContentValue),
+          date,
+          value: inputContentValue
+        }
 
-      await AsyncStorage.setItem(id, JSON.stringify(newNote))
-      console.log('Note saved successfully!')
-    } catch (error) {
-      console.error('Error saving note:', error)
+        await AsyncStorage.setItem(id, JSON.stringify(newNote))
+        console.log('Note saved successfully!')
+      } catch (error) {
+        console.error('Error saving note:', error)
+      }
     }
   }
 

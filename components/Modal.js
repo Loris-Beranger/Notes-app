@@ -9,6 +9,7 @@ function CustomModal ({ visible, closeModal, action }) {
         <View style={styles.modalContent}>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
+              style={styles.buttonActionContainer}
               onPress={() => {
                 action()
                 closeModal()
@@ -16,7 +17,10 @@ function CustomModal ({ visible, closeModal, action }) {
             >
               <Text style={styles.buttonActionLabel}>Supprimer</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={closeModal}>
+            <TouchableOpacity
+              style={styles.buttonCancelContainer}
+              onPress={closeModal}
+            >
               <Text style={styles.buttonCancelLabel}>Annuler</Text>
             </TouchableOpacity>
           </View>
@@ -31,24 +35,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)' // Fond semi-transparent
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalContent: {
     backgroundColor: colors.backgroundModalContainer,
-    padding: 20,
     borderRadius: 10,
     width: '80%',
     alignItems: 'center',
-    transform: 'translateY(-20px)'
+    transform: 'translateY(-20px)',
+    paddingHorizontal: 30
   },
   buttonsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20
+    width: '100%'
+  },
+  buttonActionContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomColor: colors.contentGrey,
+    borderBottomWidth: 1
   },
   buttonCancelLabel: {
     color: colors.contentWhite,
     fontSize: 16
+  },
+  buttonCancelContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16
   },
   buttonActionLabel: {
     color: colors.red,

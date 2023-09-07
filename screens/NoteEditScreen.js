@@ -168,7 +168,8 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginTop: 30,
     color: colors.contentWhiteMinor,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    lineHeight: 22
   },
   textInputTitle: {
     height: 30,

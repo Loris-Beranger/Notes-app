@@ -15,6 +15,7 @@ import { fr } from 'date-fns/locale'
 import { getNoteById } from '../storageFunctions/storage'
 import { useRoute } from '@react-navigation/native'
 import { extractAndTruncateFirstWord } from '../utils'
+import EditMenu from '../components/EditMenu'
 
 const NoteEditScreen = ({ navigation }) => {
   const [inputContentValue, setInputContentValue] = useState('')
@@ -94,43 +95,46 @@ const NoteEditScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.NoteEditContainer}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.buttonBack}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Entypo
-            name='chevron-left'
-            size={20}
-            color={colors.contentWhiteMinor}
-          />
-          <Text style={styles.buttonBackLabel}>Notes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.buttonDoneLabel} onPress={handleDone}>
-            Terminé
-          </Text>
-        </TouchableOpacity>
+      <View style={styles.NoteEditContentContainer}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={styles.buttonBack}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Entypo
+              name='chevron-left'
+              size={20}
+              color={colors.contentWhiteMinor}
+            />
+            <Text style={styles.buttonBackLabel}>Notes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.buttonDoneLabel} onPress={handleDone}>
+              Terminé
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TextInput
+          ref={inputRef}
+          style={styles.textInputTitle}
+          placeholder={'Titre'}
+          placeholderTextColor={colors.contentGrey}
+          onChangeText={setInputTitleValue}
+          value={inputTitleValue}
+        />
+        <Text style={styles.date}>
+          {format(new Date(date), 'MMMM dd, HH:mm ccc', {
+            locale: fr
+          }).replace('.', '')}
+        </Text>
+        <TextInput
+          style={styles.textInputContent}
+          onChangeText={setInputContentValue}
+          value={inputContentValue}
+          multiline
+        />
       </View>
-      <TextInput
-        ref={inputRef}
-        style={styles.textInputTitle}
-        placeholder={'Titre'}
-        placeholderTextColor={colors.contentGrey}
-        onChangeText={setInputTitleValue}
-        value={inputTitleValue}
-      />
-      <Text style={styles.date}>
-        {format(new Date(date), 'MMMM dd, HH:mm ccc', {
-          locale: fr
-        }).replace('.', '')}
-      </Text>
-      <TextInput
-        style={styles.textInputContent}
-        onChangeText={setInputContentValue}
-        value={inputContentValue}
-        multiline
-      />
+      <EditMenu />
     </SafeAreaView>
   )
 }
@@ -140,6 +144,9 @@ export default NoteEditScreen
 const styles = StyleSheet.create({
   NoteEditContainer: {
     backgroundColor: colors.backgroundPlatform,
+    flex: 1
+  },
+  NoteEditContentContainer: {
     flex: 1,
     padding: 20,
     paddingBottom: 0

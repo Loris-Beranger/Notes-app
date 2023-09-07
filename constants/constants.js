@@ -4,6 +4,7 @@ export const colors = {
   contentGrey: '#585664',
   backgroundPlatform: '#1f1d2b',
   backgroundContainer: '#272533',
+  backgroundContainerSecondary: '#302F2F',
   backgroundModalContainer: '#4C4B51',
   backgroundContainerHover: '#393848',
   secondaryYellow: '#f2b952',
